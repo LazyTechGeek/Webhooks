@@ -4,7 +4,7 @@
 
 All examples are demonstrated step-by-step in the tutorial:
 
-🎥 Watch the full video: [youtube.com](https://youtu.be/M6gyZ0bWXfU)
+🎥 Watch the full video: https://youtu.be/yCBbi_YbmjM
 
 Node-Red Process flows:
 

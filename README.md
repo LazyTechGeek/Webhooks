@@ -1,2 +1,126 @@
 # Webhooks
 Webhooks
+
+
+Node-Red Process flows:
+
+# Simple send / receive
+``
+[{"id":"e079a23105aeb014","type":"comment","z":"9c6148e01ec0b120","name":"Send Webhook","info":"","x":140,"y":80,"wires":[]},{"id":"9dcf26416dd2392b","type":"ha-webhook","z":"9c6148e01ec0b120","name":"Receive Webhook","server":"2754f7d8.e47878","version":3,"exposeAsEntityConfig":"","outputs":1,"webhookId":"ardruino-fECbqWfOUznsNe5ERJNi3","method_get":false,"method_head":false,"method_post":true,"method_put":true,"outputProperties":[{"property":"topic","propertyType":"msg","value":"","valueType":"triggerId"},{"property":"payload","propertyType":"msg","value":"","valueType":"data"}],"payloadLocation":false,"payloadLocationType":false,"headersLocation":false,"headersLocationType":false,"x":150,"y":260,"wires":[["45e96fb4588a72a6"]]},{"id":"45e96fb4588a72a6","type":"debug","z":"9c6148e01ec0b120","name":"debug 9","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":380,"y":260,"wires":[]},{"id":"9ad8627d57c2976f","type":"http request","z":"9c6148e01ec0b120","name":"Send Webhook","method":"POST","ret":"txt","paytoqs":"ignore","url":"http://192.168.1.140/api/webhook/arduino-board-fECbqWfOUznsNe5E","tls":"","persist":false,"proxy":"","insecureHTTPParser":false,"authType":"","senderr":false,"headers":[{"keyType":"Content-Type","keyValue":"","valueType":"other","valueValue":"application/json"}],"x":440,"y":120,"wires":[[]]},{"id":"bec73b90a096874e","type":"inject","z":"9c6148e01ec0b120","name":"Send Webhook to ESP32 Board","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"Hello from Node-RED","payloadType":"str","x":190,"y":120,"wires":[["9ad8627d57c2976f"]]},{"id":"9bf8be3bec2b9201","type":"comment","z":"9c6148e01ec0b120","name":"Receive Webhook","info":"","x":150,"y":220,"wires":[]},{"id":"2754f7d8.e47878","type":"server","name":"Home Assistant","addon":true}]
+``
+
+# Simple send / receive with confirmation
+``
+[{"id":"ddc28f57c7739fc0","type":"ha-webhook","z":"c7280eda6b75d7d3","name":"Receive Webhook 1","server":"2754f7d8.e47878","version":3,"exposeAsEntityConfig":"","outputs":1,"webhookId":"gZrG3V9Qcb3nfECbqWfOUznsNe5ERJNi310","method_get":true,"method_head":false,"method_post":true,"method_put":true,"outputProperties":[{"property":"topic","propertyType":"msg","value":"","valueType":"triggerId"},{"property":"payload","propertyType":"msg","value":"","valueType":"data"}],"payloadLocation":false,"payloadLocationType":false,"headersLocation":false,"headersLocationType":false,"x":150,"y":220,"wires":[["9e4d57d15ad05835","426f55435f0c580a"]]},{"id":"88fda429fb1b4f14","type":"inject","z":"c7280eda6b75d7d3","name":"Send Webhook Trigger","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"{\"message\":\"Hello from Node-RED!\"}","payloadType":"json","x":180,"y":100,"wires":[["c95856183edf2f15"]]},{"id":"c95856183edf2f15","type":"http request","z":"c7280eda6b75d7d3","name":"Send Webhook 1","method":"POST","ret":"txt","paytoqs":"ignore","url":"http://192.168.1.144:8123/api/webhook/gZrG3V9Qcb3nfECbqWfOUznsNe5ERJNi310","tls":"","persist":false,"proxy":"","insecureHTTPParser":false,"authType":"","senderr":false,"headers":[{"keyType":"Content-Type","keyValue":"","valueType":"other","valueValue":"application/json"}],"x":410,"y":100,"wires":[[]]},{"id":"711c9ceaf4799cf6","type":"http request","z":"c7280eda6b75d7d3","name":"Send Webhook 2","method":"POST","ret":"txt","paytoqs":"ignore","url":"http://192.168.1.144:8123/api/webhook/gZrG3V9Qcb3nfECbqWfOUznsNe5ERJNb10","tls":"","persist":false,"proxy":"","insecureHTTPParser":false,"authType":"","senderr":false,"headers":[{"keyType":"Content-Type","keyValue":"","valueType":"other","valueValue":"application/json"}],"x":650,"y":220,"wires":[[]]},{"id":"9e4d57d15ad05835","type":"function","z":"c7280eda6b75d7d3","name":"Set Webhook Status","func":"msg.payload = {\"message\":\"Message Successful!\"}\nreturn msg;\n","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":420,"y":220,"wires":[["711c9ceaf4799cf6"]]},{"id":"843a86f46aabcba9","type":"ha-webhook","z":"c7280eda6b75d7d3","name":"Receive Webhook 2","server":"2754f7d8.e47878","version":3,"exposeAsEntityConfig":"","outputs":1,"webhookId":"gZrG3V9Qcb3nfECbqWfOUznsNe5ERJNb10","method_get":true,"method_head":false,"method_post":true,"method_put":true,"outputProperties":[{"property":"topic","propertyType":"msg","value":"","valueType":"triggerId"},{"property":"payload","propertyType":"msg","value":"","valueType":"data"}],"payloadLocation":false,"payloadLocationType":false,"headersLocation":false,"headersLocationType":false,"x":150,"y":380,"wires":[["3199086c2dbeecc2"]]},{"id":"3199086c2dbeecc2","type":"debug","z":"c7280eda6b75d7d3","name":"Confirm Webhook Received","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":440,"y":380,"wires":[]},{"id":"5639159ce51ca099","type":"comment","z":"c7280eda6b75d7d3","name":"Receive Webhook","info":"","x":150,"y":180,"wires":[]},{"id":"2d7585c51688424a","type":"comment","z":"c7280eda6b75d7d3","name":"Send Webhook","info":"","x":140,"y":60,"wires":[]},{"id":"296521c4dc59d667","type":"comment","z":"c7280eda6b75d7d3","name":"Receive Webhook Confirm webhook","info":"","x":200,"y":340,"wires":[]},{"id":"426f55435f0c580a","type":"debug","z":"c7280eda6b75d7d3","name":"Webhook Payload","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":410,"y":260,"wires":[]},{"id":"2754f7d8.e47878","type":"server","name":"Home Assistant","addon":true}]
+``
+
+# Advanced using using payloads
+``
+[{"id":"a2c003c7b173036d","type":"comment","z":"c51019b1d05db31a","name":"Example Process Turn On / Off Lights","info":"","x":210,"y":60,"wires":[]},{"id":"d11dfe9dba7b72c5","type":"ha-webhook","z":"c51019b1d05db31a","name":"Receive Webhook 1","server":"2754f7d8.e47878","version":3,"exposeAsEntityConfig":"","outputs":1,"webhookId":"gZrG3V9Qcb3nfECbqWfOUznsNe5ERJNi320","method_get":true,"method_head":false,"method_post":true,"method_put":true,"outputProperties":[{"property":"topic","propertyType":"msg","value":"","valueType":"triggerId"},{"property":"payload","propertyType":"msg","value":"","valueType":"data"}],"payloadLocation":false,"payloadLocationType":false,"headersLocation":false,"headersLocationType":false,"x":150,"y":500,"wires":[["9eb1d8bdaa2d86bf","58d0403a88617a5f"]]},{"id":"135a24f92737765e","type":"inject","z":"c51019b1d05db31a","name":"Lights - Turn On","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"{\"source\":\"Lights\",\"action\":\"TurnOn\"}","payloadType":"json","x":140,"y":120,"wires":[["42755cf716a8ebf6"]]},{"id":"42755cf716a8ebf6","type":"http request","z":"c51019b1d05db31a","name":"Send Webhook 1","method":"POST","ret":"txt","paytoqs":"ignore","url":"http://192.168.1.144:8123/api/webhook/gZrG3V9Qcb3nfECbqWfOUznsNe5ERJNi320","tls":"","persist":false,"proxy":"","insecureHTTPParser":false,"authType":"","senderr":false,"headers":[{"keyType":"Content-Type","keyValue":"","valueType":"other","valueValue":"application/json"}],"x":430,"y":240,"wires":[[]]},{"id":"c20cea9e56c992f4","type":"http request","z":"c51019b1d05db31a","name":"Send Webhook 2","method":"POST","ret":"txt","paytoqs":"ignore","url":"http://192.168.1.144:8123/api/webhook/gZrG3V9Qcb3nfECbqWfOUznsNe5ERJNb21","tls":"","persist":false,"proxy":"","insecureHTTPParser":false,"authType":"","senderr":false,"headers":[{"keyType":"Content-Type","keyValue":"","valueType":"other","valueValue":"application/json"}],"x":630,"y":680,"wires":[[]]},{"id":"9eb1d8bdaa2d86bf","type":"function","z":"c51019b1d05db31a","name":"Set Webhook Status","func":"msg.payload = {\"message\":\"Message Successful!\"}\nreturn msg;\n","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":400,"y":680,"wires":[["c20cea9e56c992f4"]]},{"id":"08269edebcade996","type":"ha-webhook","z":"c51019b1d05db31a","name":"Receive Webhook 2","server":"2754f7d8.e47878","version":3,"exposeAsEntityConfig":"","outputs":1,"webhookId":"gZrG3V9Qcb3nfECbqWfOUznsNe5ERJNb21","method_get":true,"method_head":false,"method_post":true,"method_put":true,"outputProperties":[{"property":"topic","propertyType":"msg","value":"","valueType":"triggerId"},{"property":"payload","propertyType":"msg","value":"","valueType":"data"}],"payloadLocation":false,"payloadLocationType":false,"headersLocation":false,"headersLocationType":false,"x":150,"y":840,"wires":[["a7ec33cb3d306bfb"]]},{"id":"a7ec33cb3d306bfb","type":"debug","z":"c51019b1d05db31a","name":"Confirm Webhook Received","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":420,"y":840,"wires":[]},{"id":"5203c44639ffcdc6","type":"comment","z":"c51019b1d05db31a","name":"Receive Webhook","info":"","x":150,"y":460,"wires":[]},{"id":"d96f48a14b61cee3","type":"comment","z":"c51019b1d05db31a","name":"Receive Webhook Confirm webhook","info":"","x":200,"y":800,"wires":[]},{"id":"787768a52b8d0ed0","type":"inject","z":"c51019b1d05db31a","name":"Lights - Turn Off","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"{\"source\":\"Lights\",\"action\":\"TurnOff\"}","payloadType":"json","x":140,"y":160,"wires":[["42755cf716a8ebf6"]]},{"id":"58d0403a88617a5f","type":"switch","z":"c51019b1d05db31a","name":"Source","property":"payload.source","propertyType":"msg","rules":[{"t":"eq","v":"Lights","vt":"str"},{"t":"eq","v":"Heating","vt":"str"},{"t":"eq","v":"Curtains","vt":"str"}],"checkall":"true","repair":false,"outputs":3,"x":400,"y":500,"wires":[["4cc0ecd7fa58f7c5"],["13e53586709b691e"],["88d8901fbb90d361"]]},{"id":"4cc0ecd7fa58f7c5","type":"switch","z":"c51019b1d05db31a","name":"Action - Lights","property":"payload.action","propertyType":"msg","rules":[{"t":"eq","v":"TurnOn","vt":"str"},{"t":"eq","v":"TurnOff","vt":"str"}],"checkall":"true","repair":false,"outputs":2,"x":600,"y":420,"wires":[["0eaad4177b761ae0"],["b15b89c2d4a5cde9"]]},{"id":"b15b89c2d4a5cde9","type":"debug","z":"c51019b1d05db31a","name":"Turn Off Lights","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":820,"y":440,"wires":[]},{"id":"13e53586709b691e","type":"switch","z":"c51019b1d05db31a","name":"Action - Heating","property":"payload.action","propertyType":"msg","rules":[{"t":"eq","v":"TurnOn","vt":"str"},{"t":"eq","v":"TurnOff","vt":"str"}],"checkall":"true","repair":false,"outputs":2,"x":600,"y":500,"wires":[["90deda128cacb6de"],["b2ea5fd3e410b98f"]]},{"id":"90deda128cacb6de","type":"debug","z":"c51019b1d05db31a","name":"Turn On Heating","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":820,"y":480,"wires":[]},{"id":"b2ea5fd3e410b98f","type":"debug","z":"c51019b1d05db31a","name":"Turn Off Heating","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":820,"y":520,"wires":[]},{"id":"88d8901fbb90d361","type":"switch","z":"c51019b1d05db31a","name":"Action - Curtains","property":"payload.action","propertyType":"msg","rules":[{"t":"eq","v":"Open","vt":"str"},{"t":"eq","v":"Close","vt":"str"}],"checkall":"true","repair":false,"outputs":2,"x":600,"y":580,"wires":[["be888a23e478cb8a"],["a9d83381e5cf92c0"]]},{"id":"be888a23e478cb8a","type":"debug","z":"c51019b1d05db31a","name":"Open Curtains","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":820,"y":560,"wires":[]},{"id":"a9d83381e5cf92c0","type":"debug","z":"c51019b1d05db31a","name":"Close Curtains","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":820,"y":600,"wires":[]},{"id":"75d7197226ca781b","type":"inject","z":"c51019b1d05db31a","name":"Heating - Turn On","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"{\"source\":\"Heating\",\"action\":\"TurnOn\"}","payloadType":"json","x":150,"y":220,"wires":[["42755cf716a8ebf6"]]},{"id":"1be6f4a133e506bb","type":"inject","z":"c51019b1d05db31a","name":"Heating - Turn Off","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"{\"source\":\"Heating\",\"action\":\"TurnOff\"}","payloadType":"json","x":150,"y":260,"wires":[["42755cf716a8ebf6"]]},{"id":"0eaad4177b761ae0","type":"debug","z":"c51019b1d05db31a","name":"Turn On Lights","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":820,"y":400,"wires":[]},{"id":"f8c21cdb4db46456","type":"inject","z":"c51019b1d05db31a","name":"Curtains - Open","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"{\"source\":\"Curtains\",\"action\":\"Open\"}","payloadType":"json","x":140,"y":320,"wires":[["42755cf716a8ebf6"]]},{"id":"0aadb08ff47e7147","type":"inject","z":"c51019b1d05db31a","name":"Curtains - Close","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"{\"source\":\"Curtains\",\"action\":\"Close\"}","payloadType":"json","x":140,"y":360,"wires":[["42755cf716a8ebf6"]]},{"id":"2754f7d8.e47878","type":"server","name":"Home Assistant","addon":true}]
+``
+
+# Arduino Code
+``
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <WebServer.h>
+
+const char* ssid = "<SSID>";
+const char* password = "<PASSWORD>";
+
+// Outgoing webhook URL (to Home Assistant)
+const char* outgoingWebhookUrl = "https://example.duckdns.org:<EXTERNAL PORT>/api/webhook/<WEBHOOK ID>";
+
+/*
+
+Example Outgoing webhook URL structure
+https://example.ui.nabu.casa/api/webhook/<WEBHOOK ID>"
+https://example.duckdns.org:<EXTERNAL PORT>/api/webhook/<WEBHOOK ID>
+http://<Internal Home Assistant IP>:8123/api/webhook/<WEBHOOK ID>
+
+*/ 
+
+// Incoming webhook path (from Home Assistant / Node-RED)
+const char* incomingWebhookPath = "/api/webhook/<WEBHOOK ID>";
+
+#define BUTTON_PIN 14
+#define LED_PIN    2
+
+WebServer server(80);
+int lastButtonState = HIGH;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+  Serial.println("\nWiFi connected!");
+  Serial.print("ESP32 IP address: ");
+  Serial.println(WiFi.localIP());
+
+  // Incoming webhook handler
+  server.on(incomingWebhookPath, HTTP_POST, handleIncomingWebhook);
+  server.begin();
+  Serial.println("HTTP server started");
+}
+
+void loop() {
+  server.handleClient();
+
+  int currentState = digitalRead(BUTTON_PIN);
+
+  if (lastButtonState == LOW && currentState == HIGH) {
+    Serial.println("Button released — sending webhook...");
+    sendOutgoingWebhook();
+    delay(200);
+  }
+
+  lastButtonState = currentState;
+  delay(20);
+}
+
+void sendOutgoingWebhook() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin(outgoingWebhookUrl);
+    http.addHeader("Content-Type", "application/json");
+
+    String payload = "{\"message\": \"Hello from ESP32 board\"}";
+    int responseCode = http.POST(payload);
+
+    Serial.print("Outgoing webhook response: ");
+    Serial.println(responseCode);
+
+    http.end();
+  } else {
+    Serial.println("WiFi not connected — can't send webhook");
+  }
+}
+
+void handleIncomingWebhook() {
+  Serial.println("Incoming webhook received — LED ON");
+
+  // Read the POST body
+  if (server.hasArg("plain")) {
+    String payload = server.arg("plain");
+    Serial.print("Payload received: ");
+    Serial.println(payload);
+  } else {
+    Serial.println("No payload received.");
+  }
+
+  digitalWrite(LED_PIN, HIGH);
+  delay(2000);
+  digitalWrite(LED_PIN, LOW);
+
+  server.send(200, "text/plain", "OK");
+}
+``
+
